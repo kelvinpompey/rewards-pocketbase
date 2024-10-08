@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["192.168.0.3"], // Add your hostname here
+    domains: ["rewards-api.safyah.com"], // Add your hostname here
   },
 };
 
