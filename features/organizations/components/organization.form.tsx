@@ -35,7 +35,7 @@ type OrganizationFormValues = z.infer<typeof organizationSchema>;
 
 type OrganizationFormProps = {
   countries: ListResult<CountryModel>;
-  organization: OrganizationModel;
+  organization?: OrganizationModel;
 };
 
 export function OrganizationForm({
