@@ -1,5 +1,8 @@
 import Image from "next/image";
-import { OrganizationModel } from "../organization.service";
+import {
+  OrganizationModel,
+  OrganizationModelWithCountry,
+} from "../organization.service";
 import { getFileUrl } from "@/lib";
 import Link from "next/link";
 import { Label } from "@radix-ui/react-dropdown-menu";
@@ -7,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { EditIcon } from "lucide-react";
 
 type OrganizationItemProps = {
-  item: OrganizationModel;
+  item: OrganizationModelWithCountry;
 };
 export const OrganizationDetailItem = ({ item }: OrganizationItemProps) => {
   return (

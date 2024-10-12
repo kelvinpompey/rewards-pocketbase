@@ -1,10 +1,18 @@
 import PocketBase, { RecordModel } from "pocketbase";
 import * as auth from "../auth/utils";
+import { CountryModel } from "../countries/country.service";
 
 export interface OrganizationModel extends RecordModel {
   name: string;
   address: string;
   logo: string;
+  description: string;
+}
+
+export interface OrganizationModelWithCountry extends OrganizationModel {
+  expand: {
+    country: CountryModel;
+  };
 }
 
 export const getUserOrganizations = (pb: PocketBase) => {
@@ -15,7 +23,9 @@ export const getUserOrganizations = (pb: PocketBase) => {
 };
 
 export const getUserOrganization = (pb: PocketBase, id: string) => {
-  return pb.collection("organizations").getOne<OrganizationModel>(id, {
-    expand: "country",
-  });
+  return pb
+    .collection("organizations")
+    .getOne<OrganizationModelWithCountry>(id, {
+      expand: "country",
+    });
 };
