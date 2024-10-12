@@ -15,5 +15,7 @@ export const getUserOrganizations = (pb: PocketBase) => {
 };
 
 export const getUserOrganization = (pb: PocketBase, id: string) => {
-  return pb.collection("organizations").getOne<OrganizationModel>(id);
+  return pb.collection("organizations").getOne<OrganizationModel>(id, {
+    expand: "country",
+  });
 };

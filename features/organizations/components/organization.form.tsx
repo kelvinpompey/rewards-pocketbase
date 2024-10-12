@@ -29,14 +29,19 @@ import {
 } from "@/components/ui/select";
 import { ListResult } from "pocketbase";
 import { CountryModel } from "@/features/countries/country.service";
+import { OrganizationModel } from "../organization.service";
 
 type OrganizationFormValues = z.infer<typeof organizationSchema>;
 
 type OrganizationFormProps = {
   countries: ListResult<CountryModel>;
+  organization: OrganizationModel;
 };
 
-export function OrganizationForm({ countries }: OrganizationFormProps) {
+export function OrganizationForm({
+  countries,
+  organization,
+}: OrganizationFormProps) {
   const [logoFile, setLogoFile] = useState<any | null>(null);
   const router = useRouter();
 
@@ -52,10 +57,11 @@ export function OrganizationForm({ countries }: OrganizationFormProps) {
     },
   });
 
-  console.log("result ", result);
+  console.log("edit organization ", organization);
 
   const form = useForm<OrganizationFormValues>({
     resolver: zodResolver(organizationSchema),
+    defaultValues: organization,
   });
 
   const onSubmit = async (data: OrganizationFormValues) => {

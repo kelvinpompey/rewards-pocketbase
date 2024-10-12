@@ -11,6 +11,7 @@ export async function initPocketBaseServer() {
 
   const authCookie = cookies().get("pb_auth");
 
+  console.log("authCookie ", authCookie);
   if (authCookie) {
     pocketbase.authStore.loadFromCookie(
       `${authCookie.name}=${authCookie.value}`
