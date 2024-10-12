@@ -16,7 +16,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAction } from "next-safe-action/hooks";
-import { createOrganizationAction } from "../actions";
+import { createOrganizationAction, editOrganizationAction } from "../actions";
 import { organizationSchema } from "../types";
 import { useRouter } from "next/navigation";
 import { ReloadIcon } from "@radix-ui/react-icons";
@@ -45,17 +45,20 @@ export function OrganizationForm({
   const [logoFile, setLogoFile] = useState<any | null>(null);
   const router = useRouter();
 
-  const { execute, result, isPending } = useAction(createOrganizationAction, {
-    onSettled(args) {
-      if (!args.result.validationErrors) {
-        router.replace("/organizations");
-        console.log("redirecting to home ", args);
-      }
-    },
-    onError(args) {
-      console.log("on error ", args);
-    },
-  });
+  const { execute, result, isPending } = useAction(
+    organization?.id ? editOrganizationAction : createOrganizationAction,
+    {
+      onSettled(args) {
+        if (!args.result.validationErrors) {
+          router.replace("/organizations");
+          console.log("redirecting to home ", args);
+        }
+      },
+      onError(args) {
+        console.log("on error ", args);
+      },
+    }
+  );
 
   console.log("edit organization ", organization);
 
@@ -67,6 +70,11 @@ export function OrganizationForm({
   const onSubmit = async (data: OrganizationFormValues) => {
     // Create FormData for file upload
     const formData = new FormData();
+
+    if (organization?.id) {
+      formData.append("id", organization.id);
+    }
+
     formData.append("name", data.name);
     if (logoFile) {
       formData.append("logo", logoFile);

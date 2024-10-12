@@ -45,3 +45,54 @@ export const createOrganizationAction = actionClient
       }
     }
   );
+
+export const editOrganizationAction = actionClient
+  .schema(organizationSchema, {
+    handleValidationErrorsShape: (ve, utils) => {
+      console.log("transforming errors ", ve);
+      return flattenValidationErrors(ve).fieldErrors;
+    },
+  })
+  .action(
+    async ({
+      parsedInput: { id, email, name, logo, description, address, country },
+    }) => {
+      const pb = await initPocketBaseServer();
+
+      console.log(
+        "update data ",
+        id,
+        email,
+        name,
+        logo,
+        description,
+        address,
+        country
+      );
+
+      let user = getUserModel(pb);
+
+      if (!id) {
+        return { failure: "Id is required" };
+      }
+
+      try {
+        let result = await pb.collection("organizations").update(id, {
+          email,
+          name,
+          logo,
+          country,
+          description,
+          address,
+          user: user.id,
+        });
+
+        revalidatePath("/organizations");
+
+        console.log("result ", result);
+        return { success: "Successfully created organization" };
+      } catch (err) {
+        return { failure: (err as Error).message };
+      }
+    }
+  );
